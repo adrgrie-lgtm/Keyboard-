@@ -9,7 +9,6 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  administration: write
 
 concurrency:
   group: pages
@@ -22,35 +21,28 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Make repository public (required for GitHub Pages on free plan)
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          curl -sS -f -X PATCH \
-            -H "Authorization: Bearer ${GH_TOKEN}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}" \
-            -d '{"private": false}' \
-            || echo "::warning::Could not change visibility automatically - please make the repo public in Settings manually."
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Enable GitHub Pages with Actions source
+      - name: Enable GitHub Pages with Actions source (idempotent)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          curl -sS -f -X POST \
+          echo "Trying to create Pages site..."
+          if curl -sS -X POST \
             -H "Authorization: Bearer ${GH_TOKEN}" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages" \
-            -d '{"build_type": "workflow"}' \
-            || curl -sS -f -X PATCH \
+            -d '{"build_type": "workflow"}'; then
+            echo "Pages site created."
+          else
+            echo "Creation failed (likely already exists). Trying to set build_type=workflow..."
+            curl -sS -X PATCH \
               -H "Authorization: Bearer ${GH_TOKEN}" \
               -H "Accept: application/vnd.github+json" \
               "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages" \
-              -d '{"build_type": "workflow"}' \
-            || echo "::warning::Could not enable Pages via API - please set Pages source to 'GitHub Actions' in Settings."
-
-      - name: Checkout
-        uses: actions/checkout@v4
+              -d '{"build_type": "workflow"}' || echo "PATCH also failed - continuing anyway."
+          fi
 
       - name: Setup Node
         uses: actions/setup-node@v4
