@@ -123,22 +123,22 @@ export function checkAndUnlockAchievements(
 export function recordDayActivity(progress: UserProgress): UserProgress {
   const today = new Date().toISOString().slice(0, 10);
   const activeDays = new Set(progress.activeDays || []);
-  activeDays.add(today);
 
-  // Calculate streak
-  const daysArray = Array.from(activeDays).sort();
-  let streak = progress.dailyStreak;
-
-  // Simple streak check: if last practiced yesterday or today
-  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-  if (daysArray.includes(yesterday) && !daysArray.includes(today)) {
-    streak += 1;
+  // Today already recorded: nothing to update, streak stays as-is.
+  if (activeDays.has(today)) {
+    return progress;
   }
+
+  // Streak continues only if the user also practiced yesterday.
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  const streak = activeDays.has(yesterday) ? progress.dailyStreak + 1 : 1;
+
+  activeDays.add(today);
 
   const updated: UserProgress = {
     ...progress,
     activeDays: Array.from(activeDays),
-    dailyStreak: Math.max(1, streak),
+    dailyStreak: streak,
     highestStreak: Math.max(progress.highestStreak, streak),
     lastPracticedAt: new Date().toISOString(),
   };
