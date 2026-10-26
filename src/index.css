@@ -1,0 +1,330 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #2d293d;
+  --muted: #868294;
+  --rose: #ed78a0;
+  --rose-dark: #de5f8c;
+  --border: #eeeaf0;
+  --paper: #ffffff;
+  --background: #faf9fb;
+}
+
+body {
+  margin: 0;
+  background-color: var(--background);
+  color: var(--ink);
+  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Nunito", sans-serif;
+}
+
+/* Piano shell styling */
+.piano-shell {
+  position: relative;
+  padding: 14px 16px 12px;
+  border: 1px solid #e4a3b7;
+  border-radius: 22px;
+  background: linear-gradient(150deg, #edb7c8, #e8a9bc 65%, #dfa1b7);
+  box-shadow: 0 12px 24px #a1668222, inset 0 2px 2px #ffffff99;
+  user-select: none;
+}
+
+.piano-shell-compact {
+  padding: 9px 10px 8px;
+  border-radius: 16px;
+}
+
+.piano-console {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 52px;
+  padding: 2px 4px 0;
+}
+
+.piano-shell-compact .piano-console {
+  height: 32px;
+}
+
+.piano-speaker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 76px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #dc9daf69;
+  box-shadow: inset 0 1px 3px #a96d8044;
+}
+
+.piano-shell-compact .piano-speaker {
+  height: 20px;
+  width: 44px;
+  gap: 3px;
+}
+
+.piano-speaker span {
+  height: 25px;
+  width: 3px;
+  border-radius: 5px;
+  background: #c78399a6;
+  box-shadow: 1px 0 #f7ccda;
+}
+
+.piano-shell-compact .piano-speaker span {
+  width: 2px;
+  height: 14px;
+}
+
+.piano-console-center {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.piano-lcd {
+  min-width: 90px;
+  padding: 5px 10px;
+  border: 3px solid #d49aaf;
+  border-radius: 6px;
+  background: #4a4452;
+  box-shadow: inset 0 1px 4px #261f2c;
+  color: #eedde8;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-align: center;
+  font-family: monospace;
+}
+
+.piano-shell-compact .piano-lcd {
+  min-width: 66px;
+  padding: 2px 5px;
+  font-size: 7px;
+  border-width: 2px;
+}
+
+.piano-console-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.piano-console-controls i {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #f2c8d4;
+  border: 1px solid #ca8ca0;
+  box-shadow: 0 2px 0 #c68499;
+}
+
+.piano-shell-compact .piano-console-controls i {
+  width: 8px;
+  height: 8px;
+}
+
+/* Keyboard keys */
+.keyboard-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #d497aa transparent;
+  padding-bottom: 5px;
+}
+
+.piano-keys {
+  position: relative;
+  height: 172px;
+  min-width: 475px;
+}
+
+.piano-keys-wide {
+  min-width: 820px;
+  height: 185px;
+}
+
+.piano-shell-compact .piano-keys {
+  height: 108px;
+  min-width: 380px;
+}
+
+.white-key-row {
+  display: flex;
+  height: 100%;
+  gap: 2px;
+}
+
+.white-key {
+  position: relative;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 0;
+  padding: 8px 0 12px;
+  border: 1px solid #ded5da;
+  border-bottom: 5px solid #d4c9cf;
+  border-radius: 2px 2px 8px 8px;
+  background: linear-gradient(180deg, #fff 0%, #fff 72%, #f6f1f2 100%);
+  color: #827680;
+  box-shadow: 1px 1px 3px #83627718;
+  cursor: pointer;
+  transition: background 0.08s, transform 0.08s;
+}
+
+.white-key:hover {
+  background: #fff7fa;
+}
+
+.white-key.is-target {
+  background: linear-gradient(#fff2f7, #ffe3ef);
+  box-shadow: inset 0 0 0 2px #ec83a4, 0 0 12px #ed78a066;
+  color: #d65c89;
+  animation: targetPulse 1.5s infinite;
+}
+
+.white-key.is-playing {
+  transform: translateY(3px);
+  background: #fac4d7;
+  border-bottom-width: 2px;
+  color: #b74272;
+}
+
+.key-number {
+  position: absolute;
+  bottom: 44px;
+  color: #c7b9c2;
+  font-size: 9px;
+  font-weight: 900;
+  pointer-events: none;
+}
+
+.piano-shell-compact .key-number {
+  bottom: 30px;
+  font-size: 7px;
+}
+
+.white-key.is-target .key-number {
+  color: #df7197;
+}
+
+.key-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: auto;
+  pointer-events: none;
+}
+
+.key-name {
+  font-family: "Nunito", sans-serif;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.piano-shell-compact .key-name {
+  font-size: 12px;
+}
+
+.key-shortcut {
+  color: #b8aeb7;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.piano-shell-compact .key-shortcut {
+  font-size: 7px;
+}
+
+/* Black keys */
+.black-key {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  width: 7.2%;
+  height: 58%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 9px;
+  transform: translateX(-50%);
+  border: 1px solid #29242d;
+  border-bottom: 5px solid #17141a;
+  border-radius: 0 0 6px 6px;
+  background: linear-gradient(90deg, #343039, #1d1b21 26%, #302b33 88%, #18161b);
+  box-shadow: 2px 3px 4px #37273455;
+  color: #eee3eb;
+  cursor: pointer;
+  transition: height 0.08s, background 0.08s;
+}
+
+.piano-keys-wide .black-key {
+  width: 3.9%;
+}
+
+.black-key:hover,
+.black-key.is-target {
+  background: linear-gradient(90deg, #92546d, #6f384e 50%, #884b65);
+  border-color: #743c56;
+}
+
+.black-key.is-target {
+  box-shadow: 0 0 14px #ed78a0aa;
+}
+
+.black-key.is-playing {
+  height: 56%;
+  background: #bb7591;
+  border-bottom-width: 2px;
+}
+
+.black-key span {
+  font-size: 9px;
+  font-weight: 800;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.piano-front-edge {
+  height: 5px;
+  margin: 1px 8px 0;
+  border-radius: 0 0 8px 8px;
+  background: #d18ba2;
+  box-shadow: inset 0 1px 1px #bc7992;
+}
+
+@keyframes targetPulse {
+  0%, 100% {
+    box-shadow: inset 0 0 0 2px #ec83a4, 0 0 8px #ed78a044;
+  }
+  50% {
+    box-shadow: inset 0 0 0 2.5px #de5f8c, 0 0 16px #ed78a088;
+  }
+}
+
+/* Print styles for certificates */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print\:m-0,
+  .print\:m-0 * {
+    visibility: visible;
+  }
+  .print\:m-0 {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "klimper. - Spielerisch Keyboard lernen",
+  "description": "Die ausgereifte interaktive Keyboard-Lernplattform für Kinder und Einsteiger mit geführten Lektionen, Mikrofon-Tonerkennung, Rhythmus- und Gehörtraining, Notenlinien-Visualisierung und motivierender Fortschrittskontrolle.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
